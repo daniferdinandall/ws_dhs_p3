@@ -4,11 +4,8 @@ go 1.20
 
 require (
 	github.com/aiteung/atdb v0.0.11
-	github.com/aiteung/musik v0.0.5
-	github.com/aiteung/presensi v0.0.34
-	github.com/daniferdinandall/be_dhs2 v0.0.7
+	github.com/daniferdinandall/be_dhs_p3 v0.0.2
 	github.com/gofiber/fiber/v2 v2.46.0
-	github.com/gofiber/websocket/v2 v2.1.4
 	github.com/swaggo/swag v1.16.1
 	github.com/whatsauth/whatsauth v0.1.89
 	go.mongodb.org/mongo-driver v1.11.6
@@ -30,6 +27,7 @@ require (
 	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
+	github.com/gofiber/websocket/v2 v2.1.4 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
@@ -49,6 +47,7 @@ require (
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/savsgio/dictpool v0.0.0-20221023140959-7bf2e61cea94 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
+	github.com/stretchr/testify v1.8.1 // indirect
 	github.com/tinylib/msgp v1.1.8 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.47.0 // indirect
