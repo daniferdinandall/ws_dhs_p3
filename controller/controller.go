@@ -238,7 +238,7 @@ func GetDosenByID(c *fiber.Ctx) error {
 }
 
 func GetDosenByKodeDosen(c *fiber.Ctx) error {
-	kodeDosen := c.Params("kodeDosen")
+	kodeDosen := c.Params("kode")
 	if kodeDosen == "" {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
@@ -321,7 +321,7 @@ func GetMataKuliahByID(c *fiber.Ctx) error {
 }
 
 func GetMataKuliahByKodeMataKuliah(c *fiber.Ctx) error {
-	kodeMataKuliah := c.Params("kodeMataKuliah")
+	kodeMataKuliah := c.Params("kode")
 	if kodeMataKuliah == "" {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
@@ -406,7 +406,7 @@ func GetProgramStudiByID(c *fiber.Ctx) error {
 }
 
 func GetProgramStudiByKodeProgramStudi(c *fiber.Ctx) error {
-	kodeProgramStudi := c.Params("kodeProgramStudi")
+	kodeProgramStudi := c.Params("kode")
 	if kodeProgramStudi == "" {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
@@ -490,7 +490,7 @@ func GetFakultasByID(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 func GetFakultasByKodeFakultas(c *fiber.Ctx) error {
-	kodeFakultas := c.Params("kodeFakultas")
+	kodeFakultas := c.Params("kode")
 	if kodeFakultas == "" {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
