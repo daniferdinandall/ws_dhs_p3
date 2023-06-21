@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	model "github.com/daniferdinandall/be_dhs_p3/model"
 	module "github.com/daniferdinandall/be_dhs_p3/module"
 	"github.com/daniferdinandall/ws-dhs-p3/config"
 )
@@ -94,22 +95,102 @@ func GetDHSByNPM(c *fiber.Ctx) error {
 
 func CreateDHS(c *fiber.Ctx) error {
 
-	return c.JSON(fiber.Map{
-		"status":  http.StatusCreated,
-		"message": "Data created",
+	db := config.Ulbimongoconn
+	var data_dhs model.Dhs
+	if err := c.BodyParser(&data_dhs); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	insertedID, err := module.InsertDHS(db,
+		data_dhs.Mahasiswa,
+		data_dhs.MataKuliah,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     "Data berhasil disimpan.",
+		"inserted_id": insertedID,
 	})
 }
+
 func UpdateDHS(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+	db := config.Ulbimongoconn
+
+	// Get the ID from the URL parameter
+	id := c.Params("id")
+
+	// Parse the ID into an ObjectID
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	// Parse the request body into a Dhs object
+	var data_dhs model.Dhs
+	if err := c.BodyParser(&data_dhs); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	// Call the UpdateDhsById function with the parsed ID and the Presensi object
+	err = module.UpdateDhsById(db,
+		objectID,
+		data_dhs.Mahasiswa,
+		data_dhs.MataKuliah)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully updated",
 	})
 }
 
 func DeleteDHS(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+	id := c.Params("id")
+	if id == "" {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Wrong parameter",
+		})
+	}
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid id parameter",
+		})
+	}
+
+	err = module.DeleteDhsByID(config.Ulbimongoconn, objID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": fmt.Sprintf("Error deleting data for id %s", id),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": fmt.Sprintf("Data with id %s deleted successfully", id),
 	})
 }
 
@@ -118,6 +199,7 @@ func GetAllMahasiswa(c *fiber.Ctx) error {
 	mhs := module.GetMhsAll(config.Ulbimongoconn)
 	return c.JSON(mhs)
 }
+
 func GetMahasiswaByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
@@ -148,6 +230,7 @@ func GetMahasiswaByID(c *fiber.Ctx) error {
 	}
 	return c.JSON(ps)
 }
+
 func GetMahasiswaByNPM(c *fiber.Ctx) error {
 	npm := c.Params("npm")
 	if npm == "" {
@@ -181,23 +264,108 @@ func GetMahasiswaByNPM(c *fiber.Ctx) error {
 }
 
 func CreateMahasiswa(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+
+	db := config.Ulbimongoconn
+	var data_mhs model.Mahasiswa
+	if err := c.BodyParser(&data_mhs); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	insertedID, err := module.InsertMhs(db,
+		data_mhs.Npm,
+		data_mhs.Nama,
+		data_mhs.Fakultas,
+		data_mhs.DosenWali,
+		data_mhs.ProgramStudi,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     "Data berhasil disimpan.",
+		"inserted_id": insertedID,
 	})
 }
 
 func UpdateMahasiswa(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+	db := config.Ulbimongoconn
+
+	// Get the ID from the URL parameter
+	id := c.Params("id")
+
+	// Parse the ID into an ObjectID
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	// Parse the request body into a Dhs object
+	var data_mhs model.Mahasiswa
+	if err := c.BodyParser(&data_mhs); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	// Call the UpdateDhsById function with the parsed ID and the Presensi object
+	err = module.UpdateMhsById(db,
+		objectID,
+		data_mhs.Npm,
+		data_mhs.Nama,
+		data_mhs.Fakultas,
+		data_mhs.DosenWali,
+		data_mhs.ProgramStudi)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully updated",
 	})
 }
 
 func DeleteMahasiswa(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+	db := config.Ulbimongoconn
+
+	// Get the ID from the URL parameter
+	id := c.Params("id")
+
+	// Parse the ID into an ObjectID
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	// Call the DeleteDhsById function with the parsed ID
+	err = module.DeleteMhsByID(db, objectID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully deleted",
 	})
 }
 
@@ -263,24 +431,107 @@ func GetDosenByKodeDosen(c *fiber.Ctx) error {
 }
 
 func CreateDosen(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+	db := config.Ulbimongoconn
+	var data_dosen model.Dosen
+	if err := c.BodyParser(&data_dosen); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	insertedID, err := module.InsertDosen(db,
+		data_dosen.KodeDosen,
+		data_dosen.Nama,
+		data_dosen.PhoneNumber,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     "Data berhasil disimpan.",
+		"inserted_id": insertedID,
 	})
 }
 
 func UpdateDosen(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+	db := config.Ulbimongoconn
+	id := c.Params("id")
+	if id == "" {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Wrong parameter",
+		})
+	}
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid id parameter",
+		})
+	}
+
+	var data_dosen model.Dosen
+	if err := c.BodyParser(&data_dosen); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	err = module.UpdateDosenByID(db,
+		objectID,
+		data_dosen.KodeDosen,
+		data_dosen.Nama,
+		data_dosen.PhoneNumber,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data berhasil diupdate.",
 	})
 }
 
 func DeleteDosen(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+	db := config.Ulbimongoconn
+	id := c.Params("id")
+	if id == "" {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Wrong parameter",
+		})
+	}
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid id parameter",
+		})
+	}
+
+	err = module.DeleteDosenByID(db, objectID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data berhasil dihapus.",
 	})
+
 }
 
 // MATA KULIAH
@@ -346,27 +597,107 @@ func GetMataKuliahByKodeMataKuliah(c *fiber.Ctx) error {
 }
 
 func CreateMataKuliah(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
-	})
+	db := config.Ulbimongoconn
+	var data_matkul model.MataKuliah
+	if err := c.BodyParser(&data_matkul); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
 
+	insertedID, err := module.InsertMatkul(db,
+		data_matkul.KodeMatkul,
+		data_matkul.Nama,
+		data_matkul.Sks,
+		data_matkul.Dosen,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     "Data berhasil disimpan.",
+		"inserted_id": insertedID,
+	})
 }
 
 func UpdateMataKuliah(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
-	})
+	db := config.Ulbimongoconn
 
+	// Get the ID from the URL parameter
+	id := c.Params("id")
+
+	// Parse the ID into an ObjectID
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	// Parse the request body into a Presensi object
+	var data_matkul model.MataKuliah
+	if err := c.BodyParser(&data_matkul); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	// Call the UpdatePresensi function with the parsed ID and the Presensi object
+	err = module.UpdateMatkulFromID(db,
+		objectID,
+		data_matkul.KodeMatkul,
+		data_matkul.Nama,
+		data_matkul.Sks,
+		data_matkul.Dosen,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully updated",
+	})
 }
 
 func DeleteMataKuliah(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
-	})
+	db := config.Ulbimongoconn
 
+	// Get the ID from the URL parameter
+	id := c.Params("id")
+
+	// Parse the ID into an ObjectID
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	// Call the DeletePresensi function with the parsed ID
+	err = module.DeleteMatkulByID(db, objectID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully deleted",
+	})
 }
 
 // PROGRAM STUDI
@@ -374,6 +705,7 @@ func GetAllProgramStudi(c *fiber.Ctx) error {
 	programstudi := module.GetProdiAll(config.Ulbimongoconn)
 	return c.JSON(programstudi)
 }
+
 func GetProgramStudiByID(c *fiber.Ctx) error {
 	prodi := c.Params("id")
 	if prodi == "" {
@@ -429,27 +761,107 @@ func GetProgramStudiByKodeProgramStudi(c *fiber.Ctx) error {
 	}
 	return c.JSON(ps)
 }
+
 func CreateProgramStudi(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
+	db := config.Ulbimongoconn
+	var data_prodi model.ProgramStudi
+	if err := c.BodyParser(&data_prodi); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	insertedID, err := module.InsertProdi(db,
+		data_prodi.KodeProgramStudi,
+		data_prodi.Nama,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     "Data berhasil disimpan.",
+		"inserted_id": insertedID,
 	})
 }
 
 func UpdateProgramStudi(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
-	})
+	db := config.Ulbimongoconn
+	prodi := c.Params("id")
+	if prodi == "" {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Wrong parameter",
+		})
+	}
+	objectID, err := primitive.ObjectIDFromHex(prodi)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid id parameter",
+		})
+	}
+	// Parse the request body into a Presensi object
+	var data_prodi model.ProgramStudi
+	if err := c.BodyParser(&data_prodi); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
 
+	// Call the UpdatePresensi function with the parsed ID and the Presensi object
+	err = module.UpdateProdiByID(db,
+		objectID,
+		data_prodi.KodeProgramStudi,
+		data_prodi.Nama,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully updated",
+	})
 }
 
 func DeleteProgramStudi(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
-	})
+	db := config.Ulbimongoconn
+	prodi := c.Params("id")
+	if prodi == "" {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Wrong parameter",
+		})
+	}
+	objectID, err := primitive.ObjectIDFromHex(prodi)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid id parameter",
+		})
+	}
 
+	err = module.DeleteProdiByID(db, objectID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully deleted",
+	})
 }
 
 // FAKULTAS
@@ -489,6 +901,7 @@ func GetFakultasByID(c *fiber.Ctx) error {
 	}
 	return c.JSON(ps)
 }
+
 func GetFakultasByKodeFakultas(c *fiber.Ctx) error {
 	kodeFakultas := c.Params("kode")
 	if kodeFakultas == "" {
@@ -515,25 +928,103 @@ func GetFakultasByKodeFakultas(c *fiber.Ctx) error {
 }
 
 func CreateFakultas(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
-	})
+	db := config.Ulbimongoconn
+	var data_fakultas model.Fakultas
+	if err := c.BodyParser(&data_fakultas); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
 
+	insertedID, err := module.InsertFakultas(db,
+		data_fakultas.KodeFakultas,
+		data_fakultas.Nama,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     "Data berhasil disimpan.",
+		"inserted_id": insertedID,
+	})
 }
 
 func UpdateFakultas(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
-	})
+	db := config.Ulbimongoconn
+	fakultas := c.Params("id")
+	if fakultas == "" {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Wrong parameter",
+		})
+	}
+	objectID, err := primitive.ObjectIDFromHex(fakultas)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid id parameter",
+		})
+	}
+	// Parse the request body into a Presensi object
+	var data_fakultas model.Fakultas
+	if err := c.BodyParser(&data_fakultas); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
 
+	// Call the UpdatePresensi function with the parsed ID and the Presensi object
+	err = module.UpdateFakultasFromID(db,
+		objectID,
+		data_fakultas.KodeFakultas,
+		data_fakultas.Nama,
+	)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully updated",
+	})
 }
 
 func DeleteFakultas(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"status":  200,
-		"message": "Hello World",
-	})
+	db := config.Ulbimongoconn
+	fakultas := c.Params("id")
+	if fakultas == "" {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Wrong parameter",
+		})
+	}
+	objectID, err := primitive.ObjectIDFromHex(fakultas)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid id parameter",
+		})
+	}
 
+	err = module.DeleteFakultasFromID(db, objectID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": fmt.Sprintf("Error deleting data for id %s", fakultas),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Data successfully deleted",
+	})
 }

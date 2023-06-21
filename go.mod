@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/aiteung/atdb v0.0.11
-	github.com/daniferdinandall/be_dhs_p3 v0.0.2
+	github.com/daniferdinandall/be_dhs_p3 v0.0.3
 	github.com/gofiber/fiber/v2 v2.46.0
 	github.com/swaggo/swag v1.16.1
 	github.com/whatsauth/whatsauth v0.1.89

@@ -49,10 +49,13 @@ type Geometry struct {
 
 // ================================================================================================
 // DHS
+
+// ================================================================================================
+// DHS
 type Dhs struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	Mahasiswa  Mahasiswa          `bson:"mahasiswa,omitempty" json:"mahasiswa,omitempty"`
-	MataKuliah []MataKuliah       `bson:"mata_kuliah,omitempty" json:"mata_kuliah,omitempty"`
+	MataKuliah []NilaiMataKuliah  `bson:"mata_kuliah,omitempty" json:"mata_kuliah,omitempty"`
 	CreatedAt  primitive.DateTime `bson:"created_at,omitempty" json:"created_at,omitempty"`
 }
 
@@ -71,7 +74,14 @@ type MataKuliah struct {
 	Nama       string             `bson:"nama,omitempty" json:"nama,omitempty"`
 	Dosen      Dosen              `bson:"dosen,omitempty" json:"dosen,omitempty"`
 	Sks        int                `bson:"sks,omitempty" json:"sks,omitempty"`
-	Nilai      string             `bson:"nilai,omitempty" json:"nilai,omitempty"`
+}
+
+type NilaiMataKuliah struct {
+	KodeMatkul string `bson:"kode_matkul,omitempty" json:"kode_matkul,omitempty"`
+	Nama       string `bson:"nama,omitempty" json:"nama,omitempty"`
+	Dosen      Dosen  `bson:"dosen,omitempty" json:"dosen,omitempty"`
+	Sks        int    `bson:"sks,omitempty" json:"sks,omitempty"`
+	Nilai      string `bson:"nilai,omitempty" json:"nilai,omitempty"`
 }
 
 type Dosen struct {
