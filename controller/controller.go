@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -23,6 +25,108 @@ func Homepage2(c *fiber.Ctx) error {
 		"message": "Hello World",
 	})
 }
+
+// Auth
+var jwtSecret = []byte("secret-key")
+
+func Login(c *fiber.Ctx) error {
+	db := config.Ulbimongoconn
+	var data_login model.User
+	if err := c.BodyParser(&data_login); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	user, message, err := module.ValidateUserFromEmail(db, data_login.Email, data_login.Password)
+	if err != nil {
+		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
+			"status":  http.StatusUnauthorized,
+			"message": err.Error(),
+		})
+	}
+	// Generate JWT token
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["nama"] = data_login.Nama
+	claims["email"] = data_login.Email
+	claims["role"] = data_login.Role
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // Set token expiration time to 24 hours
+
+	// Sign the token with the secret key
+	tokenString, err := token.SignedString(jwtSecret)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     message,
+		"nama":        user.Nama,
+		"email":       user.Email,
+		"role":        user.Role,
+		"tokenString": tokenString,
+	})
+}
+
+func ValidateToken(c *fiber.Ctx) error {
+	var token model.Token
+	if err := c.BodyParser(&token); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	tkn := token.Token_String
+	// Check if token exists
+	if tkn == "" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
+
+	initoken, err := jwt.Parse(tkn, func(initoken *jwt.Token) (interface{}, error) {
+		// Validate the algorithm
+		if _, ok := initoken.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, jwt.ErrSignatureInvalid
+		}
+
+		return jwtSecret, nil
+	})
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Invalid token",
+		})
+	}
+
+	// Validate token claims
+	if claims, ok := initoken.Claims.(jwt.MapClaims); ok && initoken.Valid {
+		// Check if token has expired
+		expirationTime := time.Unix(int64(claims["exp"].(float64)), 0)
+		if time.Now().After(expirationTime) {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"message": "Token has expired",
+			})
+		}
+
+		// c.Locals("username", claims["username"])
+		// return c.Next()
+		return c.Status(http.StatusOK).JSON(fiber.Map{
+			"status": http.StatusOK,
+			"email":  claims["email"],
+			"role":   claims["role"],
+		})
+	}
+
+	return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		"message": "Invalid token",
+	})
+}
+
 
 // GetAllDHS godoc
 // @Summary Get All Data Dhs.
