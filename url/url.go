@@ -3,7 +3,7 @@ package url
 import (
 	"github.com/daniferdinandall/ws-dhs-p3/controller"
 	"github.com/gofiber/fiber/v2"
-	// "github.com/gofiber/swagger"
+	"github.com/gofiber/swagger" 
 )
 
 func Web(page *fiber.App) {
@@ -52,6 +52,5 @@ func Web(page *fiber.App) {
 	page.Post("/fakultas", controller.CreateFakultas)
 	page.Put("/fakultas/:id", controller.UpdateFakultas)
 	page.Delete("/fakultas/:id", controller.DeleteFakultas)
-
-	// page.Get("/docs/*", swagger.HandlerDefault)
+	page.Get("/docs/*", swagger.HandlerDefault)
 }

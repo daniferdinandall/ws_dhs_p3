@@ -1,89 +1,84 @@
 basePath: /
 definitions:
-  controller.JamKerja:
+  controller.Dhs:
     properties:
-      durasi:
-        example: 8
-        type: integer
-      gmt:
-        example: 7
-        type: integer
-      hari:
-        example:
-        - Senin
-        - Selasa
-        - Rabu
-        - Kamis
-        - Jumat
-        - Sabtu
-        - Minggu
+      _id:
+        type: string
+      mahasiswa:
+        $ref: '#/definitions/controller.Mahasiswa'
+      mata_kuliah:
         items:
-          type: string
+          $ref: '#/definitions/controller.NilaiMataKuliah'
         type: array
-      jam_keluar:
-        example: "16:00"
-        type: string
-      jam_masuk:
-        example: "08:00"
-        type: string
-      piket_tim:
-        example: Piket Z
-        type: string
-      shift:
-        example: 2
-        type: integer
     type: object
-  controller.Karyawan:
+  controller.Dosen:
     properties:
-      hari_kerja:
-        example:
-        - Senin
-        - Selasa
-        - Rabu
-        - Kamis
-        - Jumat
-        - Sabtu
-        - Minggu
-        items:
-          type: string
-        type: array
-      jabatan:
-        example: Anonymous
+      _id:
         type: string
-      jam_kerja:
-        items:
-          $ref: '#/definitions/controller.JamKerja'
-        type: array
+      kode_dosen:
+        type: string
       nama:
-        description: ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"
-          example:"123456789"`
-        example: Tes Swagger
         type: string
       phone_number:
-        example: "08123456789"
         type: string
     type: object
-  controller.Presensi:
+  controller.Fakultas:
     properties:
-      biodata:
-        $ref: '#/definitions/controller.Karyawan'
-      checkin:
-        description: Datetime     primitive.DateTime `bson:"datetime,omitempty" json:"datetime,omitempty"`
-        example: MASUK
+      _id:
         type: string
-      latitude:
-        example: 123.11
-        type: number
-      location:
-        example: Bandung
+      kode_fakultas:
         type: string
-      longitude:
-        description: ID           primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"
-          example:"123456789"`
-        example: 123.11
-        type: number
-      phone_number:
-        example: "08123456789"
+      nama:
+        type: string
+    type: object
+  controller.Mahasiswa:
+    properties:
+      _id:
+        type: string
+      dosen_wali:
+        $ref: '#/definitions/controller.Dosen'
+      fakultas:
+        $ref: '#/definitions/controller.Fakultas'
+      nama:
+        type: string
+      npm:
+        type: integer
+      program_studi:
+        $ref: '#/definitions/controller.ProgramStudi'
+    type: object
+  controller.MataKuliah:
+    properties:
+      _id:
+        type: string
+      dosen:
+        $ref: '#/definitions/controller.Dosen'
+      kode_matkul:
+        type: string
+      nama:
+        type: string
+      sks:
+        type: integer
+    type: object
+  controller.NilaiMataKuliah:
+    properties:
+      dosen:
+        $ref: '#/definitions/controller.Dosen'
+      kode_matkul:
+        type: string
+      nama:
+        type: string
+      nilai:
+        type: string
+      sks:
+        type: integer
+    type: object
+  controller.ProgramStudi:
+    properties:
+      _id:
+        type: string
+      kode_program_studi:
+        type: string
+      nama:
         type: string
     type: object
 host: ws-dani.herokuapp.com
@@ -96,75 +91,26 @@ info:
   title: TES SWAG
   version: "1.0"
 paths:
-  /delete/{id}:
-    delete:
+  /Dosen:
+    get:
       consumes:
       - application/json
-      description: Hapus data presensi.
-      parameters:
-      - description: Masukan ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-        "500":
-          description: Internal Server Error
-      summary: Delete data presensi.
-      tags:
-      - Dani
-  /ins:
-    post:
-      consumes:
-      - application/json
-      description: Input data presensi.
-      parameters:
-      - description: Payload Body [RAW]
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/controller.Presensi'
+      description: Mengambil semua data Dosen.
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Presensi'
-        "400":
-          description: Bad Request
-        "500":
-          description: Internal Server Error
-      summary: Insert data presensi.
+            $ref: '#/definitions/controller.Dosen'
+      summary: Get All Data Dosen.
       tags:
-      - Presensi
-  /presensi:
+      - Dosen
+  /Dosen/{id}:
     get:
       consumes:
       - application/json
-      description: Mengambil semua data presensi.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/controller.Presensi'
-      summary: Get All Data Presensi.
-      tags:
-      - Presensi
-  /presensi/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Ambil per ID data presensi.
+      description: Ambil per ID data Dosen.
       parameters:
       - description: Masukan ID
         in: path
@@ -177,21 +123,124 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Presensi'
+            $ref: '#/definitions/controller.Dosen'
         "400":
           description: Bad Request
         "404":
           description: Not Found
         "500":
           description: Internal Server Error
-      summary: Get By ID Data Presensi.
+      summary: Get By ID Data Dosen.
       tags:
-      - Presensi
-  /upd/{id}:
+      - Dosen
+  /Fakultas:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data Fakultas.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Fakultas'
+      summary: Get All Data Fakultas.
+      tags:
+      - Fakultas
+  /dhs:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data Dhs.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Dhs'
+      summary: Get All Data Dhs.
+      tags:
+      - Dhs
+    post:
+      consumes:
+      - application/json
+      description: Input data Dhs.
+      parameters:
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.Dhs'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Dhs'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create data Dhs.
+      tags:
+      - Dhs
+  /dhs/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Hapus data Dhs.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Delete data Dhs.
+      tags:
+      - Dhs
+    get:
+      consumes:
+      - application/json
+      description: Ambil per ID data Dhs.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Dhs'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By ID Data Dhs.
+      tags:
+      - Dhs
     put:
       consumes:
       - application/json
-      description: Ubah data presensi.
+      description: Ubah data Dhs.
       parameters:
       - description: Masukan ID
         in: path
@@ -203,21 +252,724 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/controller.Presensi'
+          $ref: '#/definitions/controller.Dhs'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Karyawan'
+            $ref: '#/definitions/controller.Dhs'
         "400":
           description: Bad Request
         "500":
           description: Internal Server Error
-      summary: Update data presensi.
+      summary: Update data Dhs.
       tags:
-      - Presensi
+      - Dhs
+  /dhs/{npm}:
+    get:
+      consumes:
+      - application/json
+      description: Ambil per NPM data Dhs.
+      parameters:
+      - description: Masukan NPM
+        in: path
+        name: npm
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Dhs'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By NPM Data Dhs.
+      tags:
+      - Dhs
+  /dosen:
+    post:
+      consumes:
+      - application/json
+      description: Input data Dosen.
+      parameters:
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.Dosen'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Dosen'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create data Dosen.
+      tags:
+      - Dosen
+  /dosen/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Hapus data Dosen.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Delete data Dosen.
+      tags:
+      - Dosen
+    put:
+      consumes:
+      - application/json
+      description: Ubah data Dosen.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.Dosen'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Dosen'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Update data Dosen.
+      tags:
+      - Dosen
+  /dosen/{kode}:
+    get:
+      consumes:
+      - application/json
+      description: Ambil per Kode Dosen data dosen.
+      parameters:
+      - description: Masukan Kode Dosen
+        in: path
+        name: kode
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Dosen'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By Kode Dosen Data Dosen.
+      tags:
+      - Dosen
+  /fakultas:
+    post:
+      consumes:
+      - application/json
+      description: Input data Fakultas.
+      parameters:
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.Fakultas'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Fakultas'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create data Fakultas.
+      tags:
+      - Fakultas
+  /fakultas/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Hapus data Fakultas.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Delete data Fakultas.
+      tags:
+      - Fakultas
+    get:
+      consumes:
+      - application/json
+      description: Ambil per ID data Fakultas.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Fakultas'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By ID Data Fakultas.
+      tags:
+      - Fakultas
+    put:
+      consumes:
+      - application/json
+      description: Ubah data Fakultas.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.Fakultas'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Fakultas'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Update data Fakultas.
+      tags:
+      - Fakultas
+  /fakultas/{kode}:
+    get:
+      consumes:
+      - application/json
+      description: Ambil per Kode Faklutas data Fakultas.
+      parameters:
+      - description: Masukan Kode Faklutas
+        in: path
+        name: kode
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Fakultas'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By Kode Faklutas Data Fakultas.
+      tags:
+      - Fakultas
+  /mahasiswa:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data mahasiswa.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Mahasiswa'
+      summary: Get All Data Mahasiswa.
+      tags:
+      - Mahasiswa
+    post:
+      consumes:
+      - application/json
+      description: Input data Mahasiswa.
+      parameters:
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.Mahasiswa'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Mahasiswa'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create data Mahasiswa.
+      tags:
+      - Mahasiswa
+  /mahasiswa/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Hapus data Mahasiswa.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Delete data Mahasiswa.
+      tags:
+      - Mahasiswa
+    get:
+      consumes:
+      - application/json
+      description: Ambil per ID data Mahasiswa.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Mahasiswa'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By ID Data Mahasiswa.
+      tags:
+      - Mahasiswa
+    put:
+      consumes:
+      - application/json
+      description: Ubah data Mahasiswa.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.Mahasiswa'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Mahasiswa'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Update data Mahasiswa.
+      tags:
+      - Mahasiswa
+  /mahasiswa/{npm}:
+    get:
+      consumes:
+      - application/json
+      description: Ambil per NPM data Mahasiswa.
+      parameters:
+      - description: Masukan NPM
+        in: path
+        name: npm
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Mahasiswa'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By NPM Data Mahasiswa.
+      tags:
+      - Mahasiswa
+  /matakuliah:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data MataKuliah.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.MataKuliah'
+      summary: Get All Data MataKuliah.
+      tags:
+      - MataKuliah
+    post:
+      consumes:
+      - application/json
+      description: Input data MataKuliah.
+      parameters:
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.MataKuliah'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.MataKuliah'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create data MataKuliah.
+      tags:
+      - MataKuliah
+  /matakuliah/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Hapus data MataKuliah.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Delete data MataKuliah.
+      tags:
+      - MataKuliah
+    get:
+      consumes:
+      - application/json
+      description: Ambil per ID data MataKuliah.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.MataKuliah'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By ID Data MataKuliah.
+      tags:
+      - MataKuliah
+    put:
+      consumes:
+      - application/json
+      description: Ubah data MataKuliah.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.MataKuliah'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.MataKuliah'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Update data MataKuliah.
+      tags:
+      - MataKuliah
+  /matakuliah/{kode}:
+    get:
+      consumes:
+      - application/json
+      description: Ambil per Kode Dosen data MataKuliah.
+      parameters:
+      - description: Masukan Kode MataKuliah
+        in: path
+        name: kode
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.MataKuliah'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By Kode Mata Kuliah Data MataKuliah.
+      tags:
+      - MataKuliah
+  /programstudi:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data ProgramStudi.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ProgramStudi'
+      summary: Get All Data ProgramStudi.
+      tags:
+      - ProgramStudi
+    post:
+      consumes:
+      - application/json
+      description: Input data ProgramStudi.
+      parameters:
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ProgramStudi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ProgramStudi'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create data ProgramStudi.
+      tags:
+      - ProgramStudi
+  /programstudi/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Hapus data ProgramStudi.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Delete data ProgramStudi.
+      tags:
+      - ProgramStudi
+    get:
+      consumes:
+      - application/json
+      description: Ambil per ID data ProgramStudi.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ProgramStudi'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By ID Data ProgramStudi.
+      tags:
+      - ProgramStudi
+    put:
+      consumes:
+      - application/json
+      description: Ubah data ProgramStudi.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload Body [RAW]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ProgramStudi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ProgramStudi'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Update data ProgramStudi.
+      tags:
+      - ProgramStudi
+  /programstudi/{kode}:
+    get:
+      consumes:
+      - application/json
+      description: Ambil per Program Studi data ProgramStudi.
+      parameters:
+      - description: Masukan Program Studi
+        in: path
+        name: kode
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ProgramStudi'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By Program Studi Data ProgramStudi.
+      tags:
+      - ProgramStudi
 schemes:
 - https
 - http
