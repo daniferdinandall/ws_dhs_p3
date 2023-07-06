@@ -4,8 +4,9 @@ go 1.20
 
 require (
 	github.com/aiteung/atdb v0.0.11
-	github.com/daniferdinandall/be_dhs_p3 v0.0.3
+	github.com/daniferdinandall/be_dhs_p3 v0.0.11
 	github.com/gofiber/fiber/v2 v2.46.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/swaggo/swag v1.16.1
 	github.com/whatsauth/whatsauth v0.1.89
 	go.mongodb.org/mongo-driver v1.11.6
@@ -21,6 +22,7 @@ require (
 	github.com/aiteung/atmessage v0.0.17 // indirect
 	github.com/aiteung/atmodel v0.0.2 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fasthttp/websocket v1.5.1 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
@@ -59,11 +61,11 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mau.fi/libsignal v0.1.0 // indirect
 	go.mau.fi/whatsmeow v0.0.0-20230316102651-f0c131192076 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
+	golang.org/x/crypto v0.11.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sync v0.2.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/sys v0.10.0 // indirect
+	golang.org/x/text v0.11.0 // indirect
 	golang.org/x/tools v0.7.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
