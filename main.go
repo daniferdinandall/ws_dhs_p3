@@ -35,7 +35,7 @@ func Dangdut() (port string) {
 // @contact.url https://github.com/daniferdinandall
 // @contact.email 1214050@std.ac.id
 
-// @host ws-dani.herokuapp.com
+// @host https://ws-dani-pemrog3-b1fcf6b5d6ca.herokuapp.com
 // @BasePath /
 // @schemes https http
 

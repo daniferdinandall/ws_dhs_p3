@@ -6,11 +6,8 @@ require (
 	github.com/aiteung/atdb v0.0.11
 	github.com/daniferdinandall/be_dhs_p3 v0.0.11
 	github.com/gofiber/fiber/v2 v2.46.0
-
 	github.com/gofiber/swagger v0.1.12
-
 	github.com/golang-jwt/jwt v3.2.2+incompatible
-
 	github.com/swaggo/swag v1.16.1
 	github.com/whatsauth/whatsauth v0.1.89
 	go.mongodb.org/mongo-driver v1.11.6
@@ -26,7 +23,6 @@ require (
 	github.com/aiteung/atmessage v0.0.17 // indirect
 	github.com/aiteung/atmodel v0.0.2 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fasthttp/websocket v1.5.1 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
