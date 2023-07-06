@@ -10,7 +10,7 @@ type Dhs struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	Mahasiswa  Mahasiswa          `bson:"mahasiswa,omitempty" json:"mahasiswa,omitempty"`
 	MataKuliah []NilaiMataKuliah  `bson:"mata_kuliah,omitempty" json:"mata_kuliah,omitempty"`
-	CreatedAt  primitive.DateTime `bson:"created_at,omitempty" json:"created_at,omitempty"`
+	// CreatedAt  primitive.DateTime `bson:"created_at,omitempty" json:"created_at,omitempty"`
 }
 
 type Mahasiswa struct {

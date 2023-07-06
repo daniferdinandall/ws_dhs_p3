@@ -24,12 +24,31 @@ func Homepage2(c *fiber.Ctx) error {
 	})
 }
 
-// DHS
+// GetAllDHS godoc
+// @Summary Get All Data Dhs.
+// @Description Mengambil semua data Dhs.
+// @Tags Dhs
+// @Accept json
+// @Produce json
+// @Success 200 {object} Dhs
+// @Router /dhs [get]
 func GetAllDHS(c *fiber.Ctx) error {
 	dhs := module.GetDhsAll(config.Ulbimongoconn)
 	return c.JSON(dhs)
 }
 
+// GetDHSByID godoc
+// @Summary Get By ID Data Dhs.
+// @Description Ambil per ID data Dhs.
+// @Tags Dhs
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200 {object} Dhs
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /dhs/{id} [get]
 func GetDHSByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
@@ -61,6 +80,18 @@ func GetDHSByID(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// GetDHSByNPM godoc
+// @Summary Get By NPM Data Dhs.
+// @Description Ambil per NPM data Dhs.
+// @Tags Dhs
+// @Accept json
+// @Produce json
+// @Param npm path string true "Masukan NPM"
+// @Success 200 {object} Dhs
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /dhs/{npm} [get]
 func GetDHSByNPM(c *fiber.Ctx) error {
 	npm := c.Params("npm")
 	if npm == "" {
@@ -93,6 +124,17 @@ func GetDHSByNPM(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// CreateDHS godoc
+// @Summary Create data Dhs.
+// @Description Input data Dhs.
+// @Tags Dhs
+// @Accept json
+// @Produce json
+// @Param request body Dhs true "Payload Body [RAW]"
+// @Success 200 {object} Dhs
+// @Failure 400
+// @Failure 500
+// @Router /dhs [post]
 func CreateDHS(c *fiber.Ctx) error {
 
 	db := config.Ulbimongoconn
@@ -121,6 +163,18 @@ func CreateDHS(c *fiber.Ctx) error {
 	})
 }
 
+// UpdateDHS godoc
+// @Summary Update data Dhs.
+// @Description Ubah data Dhs.
+// @Tags Dhs
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Param request body Dhs true "Payload Body [RAW]"
+// @Success 200 {object} Dhs
+// @Failure 400
+// @Failure 500
+// @Router /dhs/{id} [put]
 func UpdateDHS(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 
@@ -163,6 +217,17 @@ func UpdateDHS(c *fiber.Ctx) error {
 	})
 }
 
+// DeleteDeleteDHS godoc
+// @Summary Delete data Dhs.
+// @Description Hapus data Dhs.
+// @Tags Dhs
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /dhs/{id} [delete]
 func DeleteDHS(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
@@ -194,12 +259,31 @@ func DeleteDHS(c *fiber.Ctx) error {
 	})
 }
 
-// MAHASISWA
+// GetAllMahasiswa godoc
+// @Summary Get All Data Mahasiswa.
+// @Description Mengambil semua data mahasiswa.
+// @Tags Mahasiswa
+// @Accept json
+// @Produce json
+// @Success 200 {object} Mahasiswa
+// @Router /mahasiswa [get]
 func GetAllMahasiswa(c *fiber.Ctx) error {
 	mhs := module.GetMhsAll(config.Ulbimongoconn)
 	return c.JSON(mhs)
 }
 
+// GetMahasiswaByID godoc
+// @Summary Get By ID Data Mahasiswa.
+// @Description Ambil per ID data Mahasiswa.
+// @Tags Mahasiswa
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200 {object} Mahasiswa
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /mahasiswa/{id} [get]
 func GetMahasiswaByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
@@ -231,6 +315,18 @@ func GetMahasiswaByID(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// GetMahasiswaByNPM godoc
+// @Summary Get By NPM Data Mahasiswa.
+// @Description Ambil per NPM data Mahasiswa.
+// @Tags Mahasiswa
+// @Accept json
+// @Produce json
+// @Param npm path string true "Masukan NPM"
+// @Success 200 {object} Mahasiswa
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /mahasiswa/{npm} [get]
 func GetMahasiswaByNPM(c *fiber.Ctx) error {
 	npm := c.Params("npm")
 	if npm == "" {
@@ -263,6 +359,17 @@ func GetMahasiswaByNPM(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// CreateMahasiswa godoc
+// @Summary Create data Mahasiswa.
+// @Description Input data Mahasiswa.
+// @Tags Mahasiswa
+// @Accept json
+// @Produce json
+// @Param request body Mahasiswa true "Payload Body [RAW]"
+// @Success 200 {object} Mahasiswa
+// @Failure 400
+// @Failure 500
+// @Router /mahasiswa [post]
 func CreateMahasiswa(c *fiber.Ctx) error {
 
 	db := config.Ulbimongoconn
@@ -294,6 +401,18 @@ func CreateMahasiswa(c *fiber.Ctx) error {
 	})
 }
 
+// UpdateMahasiswa godoc
+// @Summary Update data Mahasiswa.
+// @Description Ubah data Mahasiswa.
+// @Tags Mahasiswa
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Param request body Mahasiswa true "Payload Body [RAW]"
+// @Success 200 {object} Mahasiswa
+// @Failure 400
+// @Failure 500
+// @Router /mahasiswa/{id} [put]
 func UpdateMahasiswa(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 
@@ -339,6 +458,18 @@ func UpdateMahasiswa(c *fiber.Ctx) error {
 	})
 }
 
+
+// DeleteDeleteMahasiswa godoc
+// @Summary Delete data Mahasiswa.
+// @Description Hapus data Mahasiswa.
+// @Tags Mahasiswa
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /mahasiswa/{id} [delete]
 func DeleteMahasiswa(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 
@@ -369,11 +500,31 @@ func DeleteMahasiswa(c *fiber.Ctx) error {
 	})
 }
 
-// DOSEN
+// GetAllDosen godoc
+// @Summary Get All Data Dosen.
+// @Description Mengambil semua data Dosen.
+// @Tags Dosen
+// @Accept json
+// @Produce json
+// @Success 200 {object} Dosen
+// @Router /Dosen [get]
 func GetAllDosen(c *fiber.Ctx) error {
 	dosen := module.GetDosenAll(config.Ulbimongoconn)
 	return c.JSON(dosen)
 }
+
+// GetDosenByID godoc
+// @Summary Get By ID Data Dosen.
+// @Description Ambil per ID data Dosen.
+// @Tags Dosen
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200 {object} Dosen
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /Dosen/{id} [get]
 func GetDosenByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
@@ -405,6 +556,18 @@ func GetDosenByID(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// GetDosenBykodeDosen godoc
+// @Summary Get By Kode Dosen Data Dosen.
+// @Description Ambil per Kode Dosen data dosen.
+// @Tags Dosen
+// @Accept json
+// @Produce json
+// @Param kode path string true "Masukan Kode Dosen"
+// @Success 200 {object} Dosen
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /dosen/{kode} [get]
 func GetDosenByKodeDosen(c *fiber.Ctx) error {
 	kodeDosen := c.Params("kode")
 	if kodeDosen == "" {
@@ -430,6 +593,17 @@ func GetDosenByKodeDosen(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// CreateDosen godoc
+// @Summary Create data Dosen.
+// @Description Input data Dosen.
+// @Tags Dosen
+// @Accept json
+// @Produce json
+// @Param request body Dosen true "Payload Body [RAW]"
+// @Success 200 {object} Dosen
+// @Failure 400
+// @Failure 500
+// @Router /dosen [post]
 func CreateDosen(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	var data_dosen model.Dosen
@@ -458,6 +632,18 @@ func CreateDosen(c *fiber.Ctx) error {
 	})
 }
 
+// UpdateDosen godoc
+// @Summary Update data Dosen.
+// @Description Ubah data Dosen.
+// @Tags Dosen
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Param request body Dosen true "Payload Body [RAW]"
+// @Success 200 {object} Dosen
+// @Failure 400
+// @Failure 500
+// @Router /dosen/{id} [put]
 func UpdateDosen(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	id := c.Params("id")
@@ -502,6 +688,17 @@ func UpdateDosen(c *fiber.Ctx) error {
 	})
 }
 
+// DeleteDeleteDosen godoc
+// @Summary Delete data Dosen.
+// @Description Hapus data Dosen.
+// @Tags Dosen
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /dosen/{id} [delete]
 func DeleteDosen(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	id := c.Params("id")
@@ -534,12 +731,32 @@ func DeleteDosen(c *fiber.Ctx) error {
 
 }
 
-// MATA KULIAH
+
+// GetAllMataKuliah godoc
+// @Summary Get All Data MataKuliah.
+// @Description Mengambil semua data MataKuliah.
+// @Tags MataKuliah
+// @Accept json
+// @Produce json
+// @Success 200 {object} MataKuliah
+// @Router /matakuliah [get]
 func GetAllMataKuliah(c *fiber.Ctx) error {
 	matakuliah := module.GetMatkulAll(config.Ulbimongoconn)
 	return c.JSON(matakuliah)
 }
 
+// GetMataKuliahByID godoc
+// @Summary Get By ID Data MataKuliah.
+// @Description Ambil per ID data MataKuliah.
+// @Tags MataKuliah
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200 {object} MataKuliah
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /matakuliah/{id} [get]
 func GetMataKuliahByID(c *fiber.Ctx) error {
 	matkul := c.Params("id")
 	if matkul == "" {
@@ -571,6 +788,19 @@ func GetMataKuliahByID(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+
+// GetMataKuliahByKodeMataKuliah godoc
+// @Summary Get By Kode Mata Kuliah Data MataKuliah.
+// @Description Ambil per Kode Dosen data MataKuliah.
+// @Tags MataKuliah
+// @Accept json
+// @Produce json
+// @Param kode path string true "Masukan Kode MataKuliah"
+// @Success 200 {object} MataKuliah
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /matakuliah/{kode} [get]
 func GetMataKuliahByKodeMataKuliah(c *fiber.Ctx) error {
 	kodeMataKuliah := c.Params("kode")
 	if kodeMataKuliah == "" {
@@ -596,6 +826,17 @@ func GetMataKuliahByKodeMataKuliah(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// CreateMataKuliah godoc
+// @Summary Create data MataKuliah.
+// @Description Input data MataKuliah.
+// @Tags MataKuliah
+// @Accept json
+// @Produce json
+// @Param request body MataKuliah true "Payload Body [RAW]"
+// @Success 200 {object} MataKuliah
+// @Failure 400
+// @Failure 500
+// @Router /matakuliah [post]
 func CreateMataKuliah(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	var data_matkul model.MataKuliah
@@ -625,6 +866,18 @@ func CreateMataKuliah(c *fiber.Ctx) error {
 	})
 }
 
+// UpdateMataKuliah godoc
+// @Summary Update data MataKuliah.
+// @Description Ubah data MataKuliah.
+// @Tags MataKuliah
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Param request body MataKuliah true "Payload Body [RAW]"
+// @Success 200 {object} MataKuliah
+// @Failure 400
+// @Failure 500
+// @Router /matakuliah/{id} [put]
 func UpdateMataKuliah(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 
@@ -670,6 +923,18 @@ func UpdateMataKuliah(c *fiber.Ctx) error {
 	})
 }
 
+
+// DeleteDeleteMataKuliah godoc
+// @Summary Delete data MataKuliah.
+// @Description Hapus data MataKuliah.
+// @Tags MataKuliah
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /matakuliah/{id} [delete]
 func DeleteMataKuliah(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 
@@ -700,12 +965,33 @@ func DeleteMataKuliah(c *fiber.Ctx) error {
 	})
 }
 
-// PROGRAM STUDI
+
+// GetAllProgramStudi godoc
+// @Summary Get All Data ProgramStudi.
+// @Description Mengambil semua data ProgramStudi.
+// @Tags ProgramStudi
+// @Accept json
+// @Produce json
+// @Success 200 {object} ProgramStudi
+// @Router /programstudi [get]
 func GetAllProgramStudi(c *fiber.Ctx) error {
 	programstudi := module.GetProdiAll(config.Ulbimongoconn)
 	return c.JSON(programstudi)
 }
 
+
+// GetProgramStudiByID godoc
+// @Summary Get By ID Data ProgramStudi.
+// @Description Ambil per ID data ProgramStudi.
+// @Tags ProgramStudi
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200 {object} ProgramStudi
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /programstudi/{id} [get]
 func GetProgramStudiByID(c *fiber.Ctx) error {
 	prodi := c.Params("id")
 	if prodi == "" {
@@ -737,6 +1023,18 @@ func GetProgramStudiByID(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// GetProgramStudiByKodeProgramStudi godoc
+// @Summary Get By Program Studi Data ProgramStudi.
+// @Description Ambil per Program Studi data ProgramStudi.
+// @Tags ProgramStudi
+// @Accept json
+// @Produce json
+// @Param kode path string true "Masukan Program Studi"
+// @Success 200 {object} ProgramStudi
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /programstudi/{kode} [get]
 func GetProgramStudiByKodeProgramStudi(c *fiber.Ctx) error {
 	kodeProgramStudi := c.Params("kode")
 	if kodeProgramStudi == "" {
@@ -762,6 +1060,18 @@ func GetProgramStudiByKodeProgramStudi(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+
+// CreateProgramStudi godoc
+// @Summary Create data ProgramStudi.
+// @Description Input data ProgramStudi.
+// @Tags ProgramStudi
+// @Accept json
+// @Produce json
+// @Param request body ProgramStudi true "Payload Body [RAW]"
+// @Success 200 {object} ProgramStudi
+// @Failure 400
+// @Failure 500
+// @Router /programstudi [post]
 func CreateProgramStudi(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	var data_prodi model.ProgramStudi
@@ -789,6 +1099,18 @@ func CreateProgramStudi(c *fiber.Ctx) error {
 	})
 }
 
+// UpdateProgramStudi godoc
+// @Summary Update data ProgramStudi.
+// @Description Ubah data ProgramStudi.
+// @Tags ProgramStudi
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Param request body ProgramStudi true "Payload Body [RAW]"
+// @Success 200 {object} ProgramStudi
+// @Failure 400
+// @Failure 500
+// @Router /programstudi/{id} [put]
 func UpdateProgramStudi(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	prodi := c.Params("id")
@@ -833,6 +1155,17 @@ func UpdateProgramStudi(c *fiber.Ctx) error {
 	})
 }
 
+// DeleteDeleteProgramStudi godoc
+// @Summary Delete data ProgramStudi.
+// @Description Hapus data ProgramStudi.
+// @Tags ProgramStudi
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /programstudi/{id} [delete]
 func DeleteProgramStudi(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	prodi := c.Params("id")
@@ -866,11 +1199,32 @@ func DeleteProgramStudi(c *fiber.Ctx) error {
 
 // FAKULTAS
 
+// GetAllFakultas godoc
+// @Summary Get All Data Fakultas.
+// @Description Mengambil semua data Fakultas.
+// @Tags Fakultas
+// @Accept json
+// @Produce json
+// @Success 200 {object} Fakultas
+// @Router /Fakultas [get]
 func GetAllFakultas(c *fiber.Ctx) error {
 	fakultas := module.GetFakultasAll(config.Ulbimongoconn)
 	return c.JSON(fakultas)
 }
 
+
+// GetFakultasByID godoc
+// @Summary Get By ID Data Fakultas.
+// @Description Ambil per ID data Fakultas.
+// @Tags Fakultas
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200 {object} Fakultas
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /fakultas/{id} [get]
 func GetFakultasByID(c *fiber.Ctx) error {
 	fakultas := c.Params("id")
 	if fakultas == "" {
@@ -902,6 +1256,18 @@ func GetFakultasByID(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// GetFakultasByKodeFaklutas godoc
+// @Summary Get By Kode Faklutas Data Fakultas.
+// @Description Ambil per Kode Faklutas data Fakultas.
+// @Tags Fakultas
+// @Accept json
+// @Produce json
+// @Param kode path string true "Masukan Kode Faklutas"
+// @Success 200 {object} Fakultas
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /fakultas/{kode} [get]
 func GetFakultasByKodeFakultas(c *fiber.Ctx) error {
 	kodeFakultas := c.Params("kode")
 	if kodeFakultas == "" {
@@ -927,6 +1293,17 @@ func GetFakultasByKodeFakultas(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
+// CreateFakultas godoc
+// @Summary Create data Fakultas.
+// @Description Input data Fakultas.
+// @Tags Fakultas
+// @Accept json
+// @Produce json
+// @Param request body Fakultas true "Payload Body [RAW]"
+// @Success 200 {object} Fakultas
+// @Failure 400
+// @Failure 500
+// @Router /fakultas [post]
 func CreateFakultas(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	var data_fakultas model.Fakultas
@@ -954,6 +1331,18 @@ func CreateFakultas(c *fiber.Ctx) error {
 	})
 }
 
+// UpdateFakultas godoc
+// @Summary Update data Fakultas.
+// @Description Ubah data Fakultas.
+// @Tags Fakultas
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Param request body Fakultas true "Payload Body [RAW]"
+// @Success 200 {object} Fakultas
+// @Failure 400
+// @Failure 500
+// @Router /fakultas/{id} [put]
 func UpdateFakultas(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	fakultas := c.Params("id")
@@ -998,6 +1387,17 @@ func UpdateFakultas(c *fiber.Ctx) error {
 	})
 }
 
+// DeleteDeleteFakultas godoc
+// @Summary Delete data Fakultas.
+// @Description Hapus data Fakultas.
+// @Tags Fakultas
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /fakultas/{id} [delete]
 func DeleteFakultas(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	fakultas := c.Params("id")
